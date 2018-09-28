@@ -7,8 +7,8 @@ const axios = require('axios');
 
 // Axios http invoke
 module.exports.handler = async (event, context) => {
-  const count = 200;
-  const invokeData = {functionName: "lambda-hello-dev-hello", payload: {}};
+  const count = 100;
+  const invokeData = {functionName: 'lambda-hello-dev-hello', payload: {}};
 
   const lambdaHelloInvokeLatency = await testLatency(count, async () => {
     await invoke(invokeData);
@@ -19,26 +19,31 @@ module.exports.handler = async (event, context) => {
   const lambdaHelloHttpsLatency = await testLatency(count, async () => {
     await axios.get('https://b0bq5ifdr4.execute-api.eu-west-1.amazonaws.com/dev/hello');
   });
+  const lambdaHelloHttpsWithAuthorizerLatency = await testLatency(count, async () => {
+    await axios.get('https://b0bq5ifdr4.execute-api.eu-west-1.amazonaws.com/dev/hello-with-auth', { 'headers': { 'Authorization': 'someToken' } });
+  });
   const fargateHelloHttpLatency = await testLatency(count, async () => {
     await axios.get('http://fargate-hello-684579960.eu-west-1.elb.amazonaws.com');
   });
   const fargateHelloHttpsLatency = await testLatency(count, async () => {
     await axios.get('https://fargate-hello-684579960.eu-west-1.elb.amazonaws.com');
   });
-  // Results are the same as via load balancer directly
-  // const fargateHelloDomainHttpLatency = await testLatency(count, async () => {
-  //   await axios.get('http://fargate-hello.passwordpad.com');
-  // });
-  // const fargateHelloDomainHttpsLatency = await testLatency(count, async () => {
-  //   await axios.get('https://fargate-hello.passwordpad.com');
-  // });
+  const fargateHelloDomainHttpLatency = await testLatency(count, async () => {
+    await axios.get('http://fargate-hello.passwordpad.com');
+  });
+  const fargateHelloDomainHttpsLatency = await testLatency(count, async () => {
+    await axios.get('https://fargate-hello.passwordpad.com');
+  });
 
   return {
     lambdaHelloInvokeLatency,
     lambdaHelloInvokeAsyncLatency,
     lambdaHelloHttpsLatency,
+    lambdaHelloHttpsWithAuthorizerLatency,
     fargateHelloHttpLatency,
-    fargateHelloHttpsLatency
+    fargateHelloHttpsLatency,
+    fargateHelloDomainHttpLatency,
+    fargateHelloDomainHttpsLatency
   };
 };
 

@@ -13,8 +13,8 @@ NEXT: .NET core
 
 * Api, PUT beverages, raise BeverateCreated events on SNS
 
-NEXT: Performance tests of ECS
-NEXT: Code comparison between ECS & Serverless, for hello-world https
+Performance tests of ECS
+Code comparison between ECS & Serverless, for hello-world https
   * Complex: VPC, Subnets, Domains (seems required), Certificates, ALB, ECR, ECS, Service definition, tasks, 
   * Had to request cert via console, validate by changing CNAME.  Serverless gives you domain out of the box.
   * Terraform not as nice as yaml+cloudFormation, in my opinion
@@ -48,16 +48,18 @@ NEXT: Code comparison between ECS & Serverless, for hello-world https
 NEXT: Coldstart tests.  Hello world node lambda seems about 100ms.  Which is fine..
 
 NEXT: Average latency of lambda trigger: SNS, SQS, Dynamo, 
+  * Explain what Lambda can be subscribed to
+  * Tip: Subscription enable/disable
 
 NEXT: Latency of e.g. CDN
 
-NEXT: Latency of Dynamo
-
-NEXT: ApiGateway with authorizer lambda that returns ALLOW immediately.  How fast is that?
+NEXT: Latency of Dynamo, S3, 
 
 NEXT: Azure: WebSites/Functions Hello world
 
-NEXT: HTTPS vs HTTP
+NEXT: Why not?  Cold starts.  Explore cold start latency.  Multiple concurrent.  Explain.
+
+NEXT: Costs between different options
 
 Session ideas:
 * Ask lots of questions

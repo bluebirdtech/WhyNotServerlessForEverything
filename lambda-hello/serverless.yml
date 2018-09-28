@@ -12,3 +12,18 @@ functions:
       - http:
           path: /hello
           method: GET
+
+  helloWithAuth:
+    handler: hello.handler
+    events:
+      - http:
+          path: /hello-with-auth
+          method: GET
+          authorizer:
+            name: auth
+            type: request
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 0
+
+  auth:
+    handler: auth.handler
