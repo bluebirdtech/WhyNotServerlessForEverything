@@ -51,9 +51,7 @@ NEXT: Average latency of lambda trigger: SNS, SQS, Dynamo,
   * Explain what Lambda can be subscribed to
   * Tip: Subscription enable/disable
 
-NEXT: Latency of e.g. CDN
-
-NEXT: Latency of Dynamo, S3, 
+NEXT: Latency of CDN, Dynamo, S3, 
 
 NEXT: Azure: WebSites/Functions Hello world
 
@@ -79,5 +77,6 @@ https://nodejs.org/en/docs/guides/nodejs-docker-webapp/
 Nice fargate diagram: https://github.com/awslabs/aws-cloudformation-templates/tree/master/aws/services/ECS
 Helped me out with Fargate execution role: https://040code.github.io/2018/01/30/fargate_with_terraform/
 When not to do serverless: https://medium.com/@PaulDJohnston/when-not-to-use-serverless-jeff-6d054d0e7098
+CloudFront serverless: https://www.npmjs.com/package/serverless-plugin-cloudfront-lambda-edge
 
 docker tag justin/node-web-app:latest 211754290204.dkr.ecr.eu-west-1.amazonaws.com/justin/node-web-app:latest

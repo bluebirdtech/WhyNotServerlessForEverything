@@ -16,6 +16,11 @@ provider:
         - "s3:PutObject"
         - "s3:GetObject"
       Resource: "*"
+    - Effect: "Allow"
+      Action:
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+      Resource: "*"
 
 functions:
   test:
@@ -27,3 +32,20 @@ resources:
       Type: AWS::S3::Bucket
       Properties: 
         BucketName: ${self:service}-${self:provider.stage}-some-bucket
+    someTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:service}-${self:provider.stage}-some-table
+        AttributeDefinitions:
+          - AttributeName: someKey
+            AttributeType: S
+        KeySchema:
+          - AttributeName: someKey
+            KeyType: HASH
+        #SSESpecification:
+        #  SSEEnabled: true
+        #StreamSpecification:
+        #  StreamViewType: NEW_AND_OLD_IMAGES
+        ProvisionedThroughput:
+          ReadCapacityUnits: 2
+          WriteCapacityUnits: 2

@@ -3,10 +3,14 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';  // Allows use of HTTPS via alb 
 
 const AWS = require('aws-sdk');
 const s3 = new AWS.S3({apiVersion: '2006-03-01'});
+const dynamo = new AWS.DynamoDB.DocumentClient({ apiVersion: "2012-08-10" });
 const lambda = new AWS.Lambda();
 const axios = require('axios');
 
-const someBucket = 'wnsfe-test-dev-some-bucket';  // TODO: Get bucket name from config
+// TODO: Get values from config
+const serviceName = 'wnsfe-test-dev';
+const someTable = `${serviceName}-some-table`;
+const someBucket = `${serviceName}-some-bucket`;
 const someFile = 'some-file.txt';
 
 // Axios http invoke
@@ -14,12 +18,20 @@ module.exports.handler = async (event, context) => {
   const count = 100;
   const invokeData = {functionName: 'lambda-hello-dev-hello', payload: {}};
 
+  const dynamoPutLatency = await testLatency(count, async () => {
+    await putSomeDocument();
+  });
+  const dynamoGetLatency = await testLatency(count, async () => {
+    await getSomeDocument();
+  });
+
   const s3PutLatency = await testLatency(count, async () => {
-    await putSomeEmptyS3Object();
+    await putSomeFile();
   });
   const s3GetLatency = await testLatency(count, async () => {
-    await getSomeEmptyS3Object();
+    await getSomeFile();
   });
+
   const lambdaHelloInvokeLatency = await testLatency(count, async () => {
     await invoke(invokeData);
   });
@@ -46,6 +58,8 @@ module.exports.handler = async (event, context) => {
   });
 
   return {
+    dynamoPutLatency,
+    dynamoGetLatency,
     s3PutLatency,
     s3GetLatency,
     lambdaHelloInvokeLatency,
@@ -103,25 +117,36 @@ const invokeAsync = (
   );
 });
 
-const putSomeEmptyS3Object = () => new Promise((resolve, reject) => {
-  var params = {
+const putSomeDocument = async () => {
+  await dynamo.put({
+    TableName : someTable,
+    Item: {
+        'someKey': 'someValue'
+    }
+  }).promise();
+};
+
+
+const getSomeDocument = async () => {
+  await dynamo.get({
+    TableName: someTable,
+    Key: {
+        'someKey': 'someValue'
+    }
+  }).promise();
+};
+
+const putSomeFile = async () => {
+  await s3.putObject({
     Body: '',
     Bucket: someBucket,
     Key: someFile
-  };
-  s3.putObject(params, function(err, data) {
-    if (err == null) resolve(data);
-    else reject(err);
-  });
-});
+  }).promise();
+};
 
-const getSomeEmptyS3Object = () => new Promise((resolve, reject) => {
-  var params = {
+const getSomeFile = async () => {
+  await s3.getObject({
     Bucket: someBucket,
     Key: someFile
-  };
-  s3.getObject(params, function(err, data) {
-    if (err == null) resolve(data);
-    else reject(err);
-  });
-});
+  }).promise();
+};
