@@ -2,14 +2,24 @@
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';  // Allows use of HTTPS via alb directly, with a non-matching certificate
 
 const AWS = require('aws-sdk');
+const s3 = new AWS.S3({apiVersion: '2006-03-01'});
 const lambda = new AWS.Lambda();
 const axios = require('axios');
+
+const someBucket = 'wnsfe-test-dev-some-bucket';  // TODO: Get bucket name from config
+const someFile = 'some-file.txt';
 
 // Axios http invoke
 module.exports.handler = async (event, context) => {
   const count = 100;
   const invokeData = {functionName: 'lambda-hello-dev-hello', payload: {}};
 
+  const s3PutLatency = await testLatency(count, async () => {
+    await putSomeEmptyS3Object();
+  });
+  const s3GetLatency = await testLatency(count, async () => {
+    await getSomeEmptyS3Object();
+  });
   const lambdaHelloInvokeLatency = await testLatency(count, async () => {
     await invoke(invokeData);
   });
@@ -36,6 +46,8 @@ module.exports.handler = async (event, context) => {
   });
 
   return {
+    s3PutLatency,
+    s3GetLatency,
     lambdaHelloInvokeLatency,
     lambdaHelloInvokeAsyncLatency,
     lambdaHelloHttpsLatency,
@@ -89,4 +101,27 @@ const invokeAsync = (
       }
     }
   );
+});
+
+const putSomeEmptyS3Object = () => new Promise((resolve, reject) => {
+  var params = {
+    Body: '',
+    Bucket: someBucket,
+    Key: someFile
+  };
+  s3.putObject(params, function(err, data) {
+    if (err == null) resolve(data);
+    else reject(err);
+  });
+});
+
+const getSomeEmptyS3Object = () => new Promise((resolve, reject) => {
+  var params = {
+    Bucket: someBucket,
+    Key: someFile
+  };
+  s3.getObject(params, function(err, data) {
+    if (err == null) resolve(data);
+    else reject(err);
+  });
 });

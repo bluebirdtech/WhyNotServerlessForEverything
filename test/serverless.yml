@@ -11,7 +11,19 @@ provider:
       Action:
         - "lambda:InvokeFunction"
       Resource: "*"
+    - Effect: "Allow"
+      Action:
+        - "s3:PutObject"
+        - "s3:GetObject"
+      Resource: "*"
 
 functions:
   test:
     handler: test.handler
+
+resources:
+  Resources:
+    S3Assets:
+      Type: AWS::S3::Bucket
+      Properties: 
+        BucketName: ${self:service}-${self:provider.stage}-some-bucket
