@@ -1,0 +1,81 @@
+* Serverless framework lambda, node-js, eu-west-2, 128-3008MB, warm, hello-world: 0.27ms (billed for 100ms!!)
+* Serverless framework lambda, node-js, eu-west-2, 1024MB, warm, native-invoke-hello-world: 21ms (invokes on a different container)
+  * invoke reference: https://gist.github.com/jjasonclark/283192301950c6e75b4cccb26b1c8ea6
+* Serverless framework lambda, node-js, eu-west-2, 1024MB, warm, wrapper-promise-invoke-hello-world: 21ms
+  * In this case, 128MB seems to give avg 60ms (but very variable) and 3008MB gives 17ms
+* Serverless framework lambda, node-js, eu-west-2, 1024MB, warm, async-invoke-hello-world: 60ms (much more variable.  As fast as 30, as slow as 100)
+  * Is this due to async behaviour on node/linux?
+* Serverless framework lambda, node-js, eu-west-2, 1024MB, warm, axios-hello-world: 30ms
+* Serverless framework lambda, node-js, eu-west-2, 1024MB, warm, https-hello-world: 28ms
+* Serverless framework lambda, node-js, eu-west-2, 1024MB, warm, https-mcs-status: 60ms
+NEXT: Try writing to dynamo
+NEXT: .NET core
+
+* Api, PUT beverages, raise BeverateCreated events on SNS
+
+NEXT: Performance tests of ECS
+NEXT: Code comparison between ECS & Serverless, for hello-world https
+  * Complex: VPC, Subnets, Domains (seems required), Certificates, ALB, ECR, ECS, Service definition, tasks, 
+  * Had to request cert via console, validate by changing CNAME.  Serverless gives you domain out of the box.
+  * Terraform not as nice as yaml+cloudFormation, in my opinion
+    * Terraform more complex
+    * Terraform names for things
+    * state lock issues when cancelling terraform plan mid-way
+    * doesn't create S3 bucket or dynamodb statelock table for you
+    * problems applying, without any helpful errors (it was user error though)
+    * Changing defaults for modules doesn't apply changes once created..
+    * Have to do terraform init sometimes when adding new modules, and terraform plan otherwise.  Why not a single command?
+    * Lots of trial and error building required terraform scripts
+    * No rollback
+    * Wow, destroy took ages... (15 minutes ish)
+  * Additional dependency on docker - need to install locally
+    * Docker installer is 500MB
+    * Lots of images to download
+    * ECR push slow, image much bigger than serverless package.  269.44MB, but looked like it pushed 700MB... (due to compression.  670MB for node8 image, 755MB for app image)
+    * Docker unreliable on Windows.  Port re-use needs docker restart: https://github.com/docker/for-win/issues/1967
+  * VPC, ALB, DNS slow to create
+  * More limits with low level concepts, forcing to need to share
+    * VPC, ECS cluster (if using ECS directly) probably want to share across services
+    * VPCs per region: 5 (there's a default VPC created in each region)
+    * Subnets per VPC: 200
+    * IPv4 CIDR blocks per VPC: 5
+    * IPv6 CIDR blocks per VPC
+    * Elastic IP addresses per region: 5
+  * Finally got hello world working, after about 14 hours work..
+    * fargate-hello-684579960.eu-west-1.elb.amazonaws.com
+    * Turns out domain, route53 & certs aren't required, unless of course you actually want to map a domain
+
+NEXT: Coldstart tests.  Hello world node lambda seems about 100ms.  Which is fine..
+
+NEXT: Average latency of lambda trigger: SNS, SQS, Dynamo, 
+
+NEXT: Latency of e.g. CDN
+
+NEXT: Latency of Dynamo
+
+NEXT: ApiGateway with authorizer lambda that returns ALLOW immediately.  How fast is that?
+
+NEXT: Azure: WebSites/Functions Hello world
+
+NEXT: HTTPS vs HTTP
+
+Session ideas:
+* Ask lots of questions
+  * Azure/AWS experience
+  * Serverless experience
+  * ECS/EKS/Fargate experience
+* Explain benefit of serverless framework over serverless with cloud formation
+
+
+https://forum.serverless.com/t/best-practice-question-api-call-lambda-invoke-or-require/873/13
+https://github.com/nik-kor/http-libraries-perf-test
+https://logz.io/blog/aws-eks-ecs-and-fargate/
+https://medium.com/devopslinks/ecs-vs-eks-vs-fargate-the-good-the-bad-the-ugly-9f68bfc3bb73
+https://blog.oxalide.io/post/aws-fargate/
+http://expressjs.com/en/starter/hello-world.html
+https://nodejs.org/en/docs/guides/nodejs-docker-webapp/
+Nice fargate diagram: https://github.com/awslabs/aws-cloudformation-templates/tree/master/aws/services/ECS
+Helped me out with Fargate execution role: https://040code.github.io/2018/01/30/fargate_with_terraform/
+When not to do serverless: https://medium.com/@PaulDJohnston/when-not-to-use-serverless-jeff-6d054d0e7098
+
+docker tag justin/node-web-app:latest 211754290204.dkr.ecr.eu-west-1.amazonaws.com/justin/node-web-app:latest

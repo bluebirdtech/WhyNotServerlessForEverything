@@ -6,6 +6,7 @@
     "axios": "^0.18.0"
   },
   "scripts": {
-    "test": "npx serverless invoke local -f test"
+    "test": "npx sls invoke -f test --data {}",
+    "deploy": "npx sls deploy"
   }
 }
