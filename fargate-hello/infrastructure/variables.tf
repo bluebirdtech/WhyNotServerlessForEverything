@@ -2,6 +2,10 @@ variable "service_name" {
   default     = "fargate-hello"
 }
 
+variable "domain" {
+  default     = "passwordpad.com"
+}
+
 variable "prod_account_id" {
   default     = "211754290204"
 }

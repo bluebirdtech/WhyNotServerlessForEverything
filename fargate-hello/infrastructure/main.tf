@@ -119,6 +119,13 @@ resource "aws_security_group" "alb" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingress {
+    protocol    = "tcp"
+    from_port   = 443
+    to_port     = 443
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   egress {
     from_port = 0
     to_port   = 0
@@ -176,15 +183,20 @@ resource "aws_alb_listener" "http" {
   }
 }
 
+data "aws_acm_certificate" "main" {
+  domain   = "*.${var.domain}"
+  statuses = ["ISSUED"]
+}
+
 resource "aws_alb_listener" "https" {
-  load_balancer_arn = "${aws_alb.alb.arn}"
+  load_balancer_arn = "${aws_alb.main.id}"
   port              = "443"
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-TLS-1-2-2017-01"
-  certificate_arn   = "${data.aws_acm_certificate.acm_cert.arn}"
+  certificate_arn   = "${data.aws_acm_certificate.main.arn}"
 
   default_action {
-    target_group_arn = "${aws_alb_target_group.blackhole.arn}"
+    target_group_arn = "${aws_alb_target_group.main.arn}"
     type             = "forward"
   }
 }

@@ -1,8 +1,46 @@
 'use strict';
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';  // Allows use of HTTPS via alb directly, with a non-matching certificate
 
 const AWS = require('aws-sdk');
 const lambda = new AWS.Lambda();
 const axios = require('axios');
+
+// Axios http invoke
+module.exports.handler = async (event, context) => {
+  const count = 200;
+  const invokeData = {functionName: "lambda-hello-dev-hello", payload: {}};
+
+  const lambdaHelloInvokeLatency = await testLatency(count, async () => {
+    await invoke(invokeData);
+  });
+  const lambdaHelloInvokeAsyncLatency = await testLatency(count, async () => {
+    await invokeAsync(invokeData);
+  });
+  const lambdaHelloHttpsLatency = await testLatency(count, async () => {
+    await axios.get('https://b0bq5ifdr4.execute-api.eu-west-1.amazonaws.com/dev/hello');
+  });
+  const fargateHelloHttpLatency = await testLatency(count, async () => {
+    await axios.get('http://fargate-hello-684579960.eu-west-1.elb.amazonaws.com');
+  });
+  const fargateHelloHttpsLatency = await testLatency(count, async () => {
+    await axios.get('https://fargate-hello-684579960.eu-west-1.elb.amazonaws.com');
+  });
+  // Results are the same as via load balancer directly
+  // const fargateHelloDomainHttpLatency = await testLatency(count, async () => {
+  //   await axios.get('http://fargate-hello.passwordpad.com');
+  // });
+  // const fargateHelloDomainHttpsLatency = await testLatency(count, async () => {
+  //   await axios.get('https://fargate-hello.passwordpad.com');
+  // });
+
+  return {
+    lambdaHelloInvokeLatency,
+    lambdaHelloInvokeAsyncLatency,
+    lambdaHelloHttpsLatency,
+    fargateHelloHttpLatency,
+    fargateHelloHttpsLatency
+  };
+};
 
 const testLatency = async (count, action) => {
   const start = (new Date).getTime();
@@ -15,66 +53,17 @@ const testLatency = async (count, action) => {
   return avgDuration;
 }
 
-// Axios http invoke
-module.exports.handler = async (event, context) => {
-  const count = 100;
-  const data = {functionName: "lambda-hello-dev-hello", payload: {}};
-  
-  const lambdaHelloInvokeLatency = await testLatency(count, async () => {
-    await lambda.invoke(createAsyncInvokeParams(data)).promise();
-  });
-  const lambdaHelloInvokeAsyncLatency = await testLatency(count, async () => {
-    await invokeAsync(data);
-  });
-  const lambdaHelloHttpsLatency = await testLatency(count, async () => {
-    await axios.get('https://b0bq5ifdr4.execute-api.eu-west-1.amazonaws.com/dev/hello');
-  });
-  const fargateHelloHttpLatency = await testLatency(count, async () => {
-    await axios.get('http://fargate-hello-684579960.eu-west-1.elb.amazonaws.com');
-  });
-
-  return {
-    lambdaHelloInvokeLatency,
-    lambdaHelloInvokeAsyncLatency,
-    lambdaHelloHttpsLatency,
-    fargateHelloHttpLatency
-  };
+const invoke = (
+  {
+    functionName,
+    payload
+  }
+) => {
+  return lambda.invoke({
+    FunctionName: functionName,
+    Payload: JSON.stringify(payload)
+  }).promise();
 };
-
-// // Lambda invoke, promises
-// module.exports.handler = async (event, context) => {
-//   const start = (new Date).getTime();
-//   const params = {functionName: "my-service-dev-hello", payload: {start}};
-
-//   await nativeInvoke(params);
-//   console.log(`${contextId} :: test end: ${(new Date).getTime()-start}`);
-// };
-
-// Lambda invoke, no promises
-// module.exports.handler = (event, context, callback) => {
-//   const start = (new Date).getTime();
-//   const params = {functionName: "my-service-dev-hello", payload: {start}};
-
-//   lambda.invoke(createAsyncInvokeParams(params), (err, data) => {
-//     if (err == null) {
-//       console.log(`${contextId} :: test end: ${(new Date).getTime()-start}`);
-//       callback(null, null);
-//     } else {
-//       callback(err, null);
-//     }
-//   });
-// };
-
-
-// const wrapperPromiseInvoke = params => new Promise((resolve, reject) => {
-//   lambda.invoke(createAsyncInvokeParams(params), (err, data) => {
-//     if (err == null) {
-//       resolve(data);
-//     } else {
-//       reject(err);
-//     }
-//   });
-// });
 
 const invokeAsync = (
   {
@@ -96,14 +85,3 @@ const invokeAsync = (
     }
   );
 });
-
-const createAsyncInvokeParams = (
-  {
-    functionName,
-    payload
-  }
-) => ({
-  FunctionName: functionName,
-  Payload: JSON.stringify(payload)
-});
-
