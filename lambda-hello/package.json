@@ -3,6 +3,7 @@
     "serverless": "^1.32.0"
   },
   "scripts": {
-    "deploy": "npx sls deploy"
+    "deploy": "npx sls deploy",
+    "deploy-us": "npx sls deploy --region us-east-1"
   }
 }

@@ -3,11 +3,12 @@ service: aws-experiments
 provider:
   name: aws
   runtime: nodejs8.10
-  region: eu-west-1
+  region: ${opt:region, 'eu-west-1'}
   timeout: 300
   environment:
     SOME_BUCKET_NAME: ${self:custom.someBucketName}
     SOME_TABLE_NAME: ${self:custom.someTableName}
+    REGION: ${self:provider.region}
   iamRoleStatements:
     - Effect: "Allow"
       Action:
@@ -25,7 +26,7 @@ provider:
       Resource: "*"
 
 custom:
-  someBucketName: ${self:service}-some-bucket
+  someBucketName: ${self:service}-${self:provider.region}-some-bucket
   someTableName: ${self:service}-some-table
 
 functions:

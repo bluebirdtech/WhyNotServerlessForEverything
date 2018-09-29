@@ -7,7 +7,9 @@
   },
   "scripts": {
     "test": "npx sls invoke -f test --data {}",
+    "test-us": "npx sls invoke -f test --data {} -r us-east-1",
     "deploy": "npx sls deploy",
+    "deploy-us": "npx sls deploy --region us-east-1",
     "d": "npx sls deploy -f test",
     "t": "npm run d && npm test"
   }
