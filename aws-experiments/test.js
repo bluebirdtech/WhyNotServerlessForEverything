@@ -6,6 +6,8 @@ const s3 = new AWS.S3({apiVersion: '2006-03-01'});
 const dynamo = new AWS.DynamoDB.DocumentClient({ apiVersion: "2012-08-10" });
 const lambda = new AWS.Lambda();
 const axios = require('axios');
+const http = require('http');
+const https = require('https');
 
 const someFile = 'some-file.txt';
 
@@ -42,8 +44,14 @@ module.exports.handler = async (event, context) => {
   const fargateHelloHttpLatency = await testLatency(count, async () => {
     await axios.get('http://fargate-hello-684579960.eu-west-1.elb.amazonaws.com');
   });
+  const fargateHelloHttpStandardLatency = await testLatency(count, async () => {
+    await httpGet('http://fargate-hello-684579960.eu-west-1.elb.amazonaws.com');
+  });
   const fargateHelloHttpsLatency = await testLatency(count, async () => {
     await axios.get('https://fargate-hello-684579960.eu-west-1.elb.amazonaws.com');
+  });
+  const fargateHelloHttpsStandardLatency = await testLatency(count, async () => {
+    await httpsGet('https://fargate-hello-684579960.eu-west-1.elb.amazonaws.com');
   });
   const fargateHelloDomainHttpLatency = await testLatency(count, async () => {
     await axios.get('http://fargate-hello.passwordpad.com');
@@ -62,7 +70,9 @@ module.exports.handler = async (event, context) => {
     lambdaHelloHttpsLatency,
     lambdaHelloHttpsWithAuthorizerLatency,
     fargateHelloHttpLatency,
+    fargateHelloHttpStandardLatency,
     fargateHelloHttpsLatency,
+    fargateHelloHttpsStandardLatency,
     fargateHelloDomainHttpLatency,
     fargateHelloDomainHttpsLatency
   };
@@ -78,6 +88,34 @@ const testLatency = async (count, action) => {
   const avgDuration = ((new Date).getTime()-start) / count;
   return avgDuration;
 }
+
+const httpGet = (url) => new Promise((resolve, reject) => {
+  http.get(url, (resp) => {
+    let data = '';
+    resp.on('data', (chunk) => {
+      data += chunk;
+    });
+    resp.on('end', () => {
+      resolve(data);
+    });
+  }).on("error", (err) => {
+    reject(err);
+  });
+});
+
+const httpsGet = (url) => new Promise((resolve, reject) => {
+  https.get(url, (resp) => {
+    let data = '';
+    resp.on('data', (chunk) => {
+      data += chunk;
+    });
+    resp.on('end', () => {
+      resolve(data);
+    });
+  }).on("error", (err) => {
+    reject(err);
+  });
+});
 
 const invoke = (
   {

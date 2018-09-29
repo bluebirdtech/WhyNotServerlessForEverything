@@ -8,6 +8,7 @@
   "scripts": {
     "test": "npx sls invoke -f test --data {}",
     "deploy": "npx sls deploy",
-    "d": "npx sls deploy -f test"
+    "d": "npx sls deploy -f test",
+    "t": "npm run d && npm test"
   }
 }
