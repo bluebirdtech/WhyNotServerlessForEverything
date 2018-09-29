@@ -1,10 +1,6 @@
-* Serverless framework lambda, node-js, eu-west-2, 128-3008MB, warm, hello-world: 0.27ms (billed for 100ms!!)
-* Serverless framework lambda, node-js, eu-west-2, 1024MB, warm, native-invoke-hello-world: 21ms
-  * invoke reference: https://gist.github.com/jjasonclark/283192301950c6e75b4cccb26b1c8ea6
 * Serverless framework lambda, node-js, eu-west-2, 1024MB, warm, wrapper-promise-invoke-hello-world: 21ms
   * In this case, 128MB seems to give avg 60ms (but very variable) and 3008MB gives 17ms
 
-NEXT: Invoke with low/high memory
 NEXT: Invoke on US region
 
 
@@ -52,6 +48,7 @@ NEXT: Azure: WebSites/Functions Hello world
 
 NEXT: Costs between different options
   * AWS billed in 100ms increments, 0.27ms execution time => 100ms billed
+  * Memory size affects overall container performance, not just memory size
 
 Session ideas:
 * Ask lots of questions
@@ -73,5 +70,6 @@ Nice fargate diagram: https://github.com/awslabs/aws-cloudformation-templates/tr
 Helped me out with Fargate execution role: https://040code.github.io/2018/01/30/fargate_with_terraform/
 When not to do serverless: https://medium.com/@PaulDJohnston/when-not-to-use-serverless-jeff-6d054d0e7098
 CloudFront serverless: https://www.npmjs.com/package/serverless-plugin-cloudfront-lambda-edge
+Lambda invoke reference: https://gist.github.com/jjasonclark/283192301950c6e75b4cccb26b1c8ea6
 
 docker tag justin/node-web-app:latest 211754290204.dkr.ecr.eu-west-1.amazonaws.com/justin/node-web-app:latest

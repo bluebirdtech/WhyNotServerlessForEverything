@@ -13,6 +13,18 @@ functions:
           path: /hello
           method: GET
 
+  hello128MB:
+    handler: hello.handler
+    memorySize: 128
+
+  hello512MB:
+    handler: hello.handler
+    memorySize: 512
+
+  hello3008MB:
+    handler: hello.handler
+    memorySize: 3008
+
   helloWithAuth:
     handler: hello.handler
     events:

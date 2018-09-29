@@ -35,6 +35,15 @@ module.exports.handler = async (event, context) => {
   const lambdaHelloInvokeAsyncLatency = await testLatency(count, async () => {
     await lambdaInvokeAsync(functionName);
   });
+  const lambdaHello128MBInvokeLatency = await testLatency(count, async () => {
+    await lambdaInvoke(`${functionName}128MB`);
+  });
+  const lambdaHello512MBInvokeLatency = await testLatency(count, async () => {
+    await lambdaInvoke(`${functionName}512MB`);
+  });
+  const lambdaHello3008MBInvokeLatency = await testLatency(count, async () => {
+    await lambdaInvoke(`${functionName}3008MB`);
+  });
   const lambdaHelloHttpsLatency = await testLatency(count, async () => {
     await axios.get('https://b0bq5ifdr4.execute-api.eu-west-1.amazonaws.com/dev/hello');
   });
@@ -67,6 +76,9 @@ module.exports.handler = async (event, context) => {
     s3GetLatency,
     lambdaHelloInvokeLatency,
     lambdaHelloInvokeAsyncLatency,
+    lambdaHello128MBInvokeLatency,
+    lambdaHello512MBInvokeLatency,
+    lambdaHello3008MBInvokeLatency,
     lambdaHelloHttpsLatency,
     lambdaHelloHttpsWithAuthorizerLatency,
     fargateHelloHttpLatency,
