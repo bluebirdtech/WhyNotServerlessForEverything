@@ -13,7 +13,7 @@ const someFile = 'some-file.txt';
 
 module.exports.handler = async (event, context) => {
   const count = 100;
-  const invokeData = {functionName: 'lambda-hello-dev-hello', payload: {}};
+  const functionName = 'lambda-hello-dev-hello';
 
   const dynamoPutLatency = await testLatency(count, async () => {
     await putSomeDocument();
@@ -30,10 +30,10 @@ module.exports.handler = async (event, context) => {
   });
 
   const lambdaHelloInvokeLatency = await testLatency(count, async () => {
-    await invoke(invokeData);
+    await lambdaInvoke(functionName);
   });
   const lambdaHelloInvokeAsyncLatency = await testLatency(count, async () => {
-    await invokeAsync(invokeData);
+    await lambdaInvokeAsync(functionName);
   });
   const lambdaHelloHttpsLatency = await testLatency(count, async () => {
     await axios.get('https://b0bq5ifdr4.execute-api.eu-west-1.amazonaws.com/dev/hello');
@@ -112,73 +112,48 @@ const httpsGet = (url) => new Promise((resolve, reject) => {
     resp.on('end', () => {
       resolve(data);
     });
-  }).on("error", (err) => {
+  }).on('error', (err) => {
     reject(err);
   });
 });
 
-const invoke = (
-  {
-    functionName,
-    payload
-  }
-) => {
-  return lambda.invoke({
+const lambdaInvoke = functionName => 
+  lambda.invoke({
     FunctionName: functionName,
-    Payload: JSON.stringify(payload)
+    Payload: '{}'
   }).promise();
-};
 
-const invokeAsync = (
-  {
-    functionName,
-    payload
-  }
-) => new Promise((resolve, reject) => {
-  lambda.invokeAsync(
-    {
-      FunctionName: functionName,
-      InvokeArgs: JSON.stringify(payload)
-    },
-    (err, data) => {
-      if (err == null) {
-        resolve(data);
-      } else {
-        reject(err);
-      }
-    }
-  );
-});
+const lambdaInvokeAsync = functionName => 
+  lambda.invokeAsync({
+    FunctionName: functionName,
+    InvokeArgs: '{}'
+  }).promise();
 
-const putSomeDocument = async () => {
-  await dynamo.put({
+const putSomeDocument = () => 
+  dynamo.put({
     TableName : process.env.SOME_TABLE_NAME,
     Item: {
-        'someKey': 'someValue'
+      'someKey': 'someValue'
     }
   }).promise();
-};
 
-const getSomeDocument = async () => {
-  await dynamo.get({
+const getSomeDocument = () => 
+  dynamo.get({
     TableName: process.env.SOME_TABLE_NAME,
     Key: {
-        'someKey': 'someValue'
+      'someKey': 'someValue'
     }
   }).promise();
-};
 
-const putSomeFile = async () => {
-  await s3.putObject({
+const putSomeFile = () =>
+  s3.putObject({
     Body: '',
     Bucket: process.env.SOME_BUCKET_NAME,
     Key: someFile
   }).promise();
-};
 
-const getSomeFile = async () => {
-  await s3.getObject({
+const getSomeFile = () =>
+  s3.getObject({
     Bucket: process.env.SOME_BUCKET_NAME,
     Key: someFile
   }).promise();
-};

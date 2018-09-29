@@ -1,13 +1,12 @@
 * Serverless framework lambda, node-js, eu-west-2, 128-3008MB, warm, hello-world: 0.27ms (billed for 100ms!!)
-* Serverless framework lambda, node-js, eu-west-2, 1024MB, warm, native-invoke-hello-world: 21ms (invokes on a different container)
+* Serverless framework lambda, node-js, eu-west-2, 1024MB, warm, native-invoke-hello-world: 21ms
   * invoke reference: https://gist.github.com/jjasonclark/283192301950c6e75b4cccb26b1c8ea6
 * Serverless framework lambda, node-js, eu-west-2, 1024MB, warm, wrapper-promise-invoke-hello-world: 21ms
   * In this case, 128MB seems to give avg 60ms (but very variable) and 3008MB gives 17ms
-* Serverless framework lambda, node-js, eu-west-2, 1024MB, warm, async-invoke-hello-world: 60ms (much more variable.  As fast as 30, as slow as 100)
-  * Is this due to async behaviour on node/linux?
-* Serverless framework lambda, node-js, eu-west-2, 1024MB, warm, axios-hello-world: 30ms
-* Serverless framework lambda, node-js, eu-west-2, 1024MB, warm, https-hello-world: 28ms
-* Serverless framework lambda, node-js, eu-west-2, 1024MB, warm, https-mcs-status: 60ms
+
+NEXT: Invoke with low/high memory
+NEXT: Invoke on US region
+
 
 Performance tests of ECS
 Code comparison between ECS & Serverless, for hello-world https
@@ -52,6 +51,7 @@ NEXT: Average latency of lambda trigger: SNS, SQS, Dynamo,
 NEXT: Azure: WebSites/Functions Hello world
 
 NEXT: Costs between different options
+  * AWS billed in 100ms increments, 0.27ms execution time => 100ms billed
 
 Session ideas:
 * Ask lots of questions
@@ -59,6 +59,7 @@ Session ideas:
   * Serverless experience
   * ECS/EKS/Fargate experience
 * Explain benefit of serverless framework over serverless with cloud formation
+* Ideas on how to use Fargate, but keep per service cost low?
 
 
 https://forum.serverless.com/t/best-practice-question-api-call-lambda-invoke-or-require/873/13
