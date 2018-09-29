@@ -7,13 +7,8 @@ const dynamo = new AWS.DynamoDB.DocumentClient({ apiVersion: "2012-08-10" });
 const lambda = new AWS.Lambda();
 const axios = require('axios');
 
-// TODO: Get values from config
-const serviceName = 'wnsfe-test-dev';
-const someTable = `${serviceName}-some-table`;
-const someBucket = `${serviceName}-some-bucket`;
 const someFile = 'some-file.txt';
 
-// Axios http invoke
 module.exports.handler = async (event, context) => {
   const count = 100;
   const invokeData = {functionName: 'lambda-hello-dev-hello', payload: {}};
@@ -119,17 +114,16 @@ const invokeAsync = (
 
 const putSomeDocument = async () => {
   await dynamo.put({
-    TableName : someTable,
+    TableName : process.env.SOME_TABLE_NAME,
     Item: {
         'someKey': 'someValue'
     }
   }).promise();
 };
 
-
 const getSomeDocument = async () => {
   await dynamo.get({
-    TableName: someTable,
+    TableName: process.env.SOME_TABLE_NAME,
     Key: {
         'someKey': 'someValue'
     }
@@ -139,14 +133,14 @@ const getSomeDocument = async () => {
 const putSomeFile = async () => {
   await s3.putObject({
     Body: '',
-    Bucket: someBucket,
+    Bucket: process.env.SOME_BUCKET_NAME,
     Key: someFile
   }).promise();
 };
 
 const getSomeFile = async () => {
   await s3.getObject({
-    Bucket: someBucket,
+    Bucket: process.env.SOME_BUCKET_NAME,
     Key: someFile
   }).promise();
 };

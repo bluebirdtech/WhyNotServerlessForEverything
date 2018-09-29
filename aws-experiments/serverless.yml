@@ -1,11 +1,13 @@
-service: wnsfe-test
+service: aws-experiments
 
 provider:
   name: aws
   runtime: nodejs8.10
   region: eu-west-1
   timeout: 300
-
+  environment:
+    SOME_BUCKET_NAME: ${self:custom.someBucketName}
+    SOME_TABLE_NAME: ${self:custom.someTableName}
   iamRoleStatements:
     - Effect: "Allow"
       Action:
@@ -22,20 +24,24 @@ provider:
         - dynamodb:PutItem
       Resource: "*"
 
+custom:
+  someBucketName: ${self:service}-some-bucket
+  someTableName: ${self:service}-some-table
+
 functions:
   test:
     handler: test.handler
 
 resources:
   Resources:
-    S3Assets:
+    someBucket:
       Type: AWS::S3::Bucket
       Properties: 
-        BucketName: ${self:service}-${self:provider.stage}-some-bucket
+        BucketName: ${self:custom.someBucketName}
     someTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:service}-${self:provider.stage}-some-table
+        TableName: ${self:custom.someTableName}
         AttributeDefinitions:
           - AttributeName: someKey
             AttributeType: S

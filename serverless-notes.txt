@@ -8,10 +8,6 @@
 * Serverless framework lambda, node-js, eu-west-2, 1024MB, warm, axios-hello-world: 30ms
 * Serverless framework lambda, node-js, eu-west-2, 1024MB, warm, https-hello-world: 28ms
 * Serverless framework lambda, node-js, eu-west-2, 1024MB, warm, https-mcs-status: 60ms
-NEXT: Try writing to dynamo
-NEXT: .NET core
-
-* Api, PUT beverages, raise BeverateCreated events on SNS
 
 Performance tests of ECS
 Code comparison between ECS & Serverless, for hello-world https
@@ -45,17 +41,15 @@ Code comparison between ECS & Serverless, for hello-world https
     * fargate-hello-684579960.eu-west-1.elb.amazonaws.com
     * Turns out domain, route53 & certs aren't required, unless of course you actually want to map a domain
 
-NEXT: Coldstart tests.  Hello world node lambda seems about 100ms.  Which is fine..
+NEXT: Why not?  Cold starts.  Explore cold start latency.  Multiple concurrent.  Explain.
+
+NEXT: .NET core
 
 NEXT: Average latency of lambda trigger: SNS, SQS, Dynamo, 
   * Explain what Lambda can be subscribed to
   * Tip: Subscription enable/disable
 
-NEXT: Latency of CDN, Dynamo, S3, 
-
 NEXT: Azure: WebSites/Functions Hello world
-
-NEXT: Why not?  Cold starts.  Explore cold start latency.  Multiple concurrent.  Explain.
 
 NEXT: Costs between different options
 
