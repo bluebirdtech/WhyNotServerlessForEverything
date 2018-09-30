@@ -42,6 +42,7 @@ NEXT: Costs between different options
 
 Session ideas:
 * Why not?  Cold starts.  Explore cold start latency.  Multiple concurrent.  Explain.
+  * Dotnet cold starts slower
 * Ask lots of questions
   * Azure/AWS experience
   * Serverless experience
