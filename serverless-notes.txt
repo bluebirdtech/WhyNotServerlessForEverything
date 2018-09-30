@@ -1,6 +1,3 @@
-* Serverless framework lambda, node-js, eu-west-2, 1024MB, warm, wrapper-promise-invoke-hello-world: 21ms
-  * In this case, 128MB seems to give avg 60ms (but very variable) and 3008MB gives 17ms
-
 Performance tests of ECS
 Code comparison between ECS & Serverless, for hello-world https
   * Complex: VPC, Subnets, Domains (seems required), Certificates, ALB, ECR, ECS, Service definition, tasks, 
@@ -39,8 +36,6 @@ NEXT: Average latency of lambda trigger: SNS, SQS, Dynamo,
   * Explain what Lambda can be subscribed to
   * Tip: Subscription enable/disable
 
-NEXT: .NET core
-
 NEXT: Azure: WebSites/Functions Hello world
 
 NEXT: Costs between different options
@@ -70,3 +65,4 @@ CloudFront serverless: https://www.npmjs.com/package/serverless-plugin-cloudfron
 Lambda invoke reference: https://gist.github.com/jjasonclark/283192301950c6e75b4cccb26b1c8ea6
 When not to use serverless: https://serverless.com/blog/when-why-not-use-serverless/
 Serverless is not a silver bullet, but it's close: https://medium.com/@elliot_f/serverless-is-not-a-silver-bullet-but-its-close-e79c520b2b87
+Performance by language: https://read.acloud.guru/comparing-aws-lambda-performance-when-using-node-js-java-c-or-python-281bef2c740f

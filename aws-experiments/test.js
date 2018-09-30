@@ -59,6 +59,10 @@ module.exports.handler = async (event, context) => {
     };
   }
 
+  const lambdaHelloCSharpInvokeLatency = await testLatency(count, async () => {
+    await lambdaInvoke('lambda-dotnet-hello-dev-hello');
+  });
+
   const lambdaHelloHttpsLatency = await testLatency(count, async () => {
     await axios.get('https://b0bq5ifdr4.execute-api.eu-west-1.amazonaws.com/dev/hello');
   });
@@ -94,6 +98,7 @@ module.exports.handler = async (event, context) => {
     lambdaHello128MBInvokeLatency,
     lambdaHello512MBInvokeLatency,
     lambdaHello3008MBInvokeLatency,
+    lambdaHelloCSharpInvokeLatency,
     lambdaHelloHttpsLatency,
     lambdaHelloHttpsWithAuthorizerLatency,
     fargateHelloHttpLatency,

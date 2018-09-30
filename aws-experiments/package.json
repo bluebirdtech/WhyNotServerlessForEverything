@@ -11,6 +11,6 @@
     "deploy": "npx sls deploy",
     "deploy-us": "npx sls deploy --region us-east-1",
     "d": "npx sls deploy -f test",
-    "t": "npm run d && npm test"
+    "dt": "npm run d && npm test"
   }
 }

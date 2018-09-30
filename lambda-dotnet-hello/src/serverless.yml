@@ -1,0 +1,13 @@
+service: lambda-dotnet-hello
+
+provider:
+  name: aws
+  runtime: dotnetcore2.1
+  region: ${opt:region, 'eu-west-1'}
+
+package:
+  artifact: bin/release/netcoreapp2.1/deploy-package.zip
+
+functions:
+  hello:
+    handler: CsharpHandlers::AwsDotnetCsharp.Handler::Hello
