@@ -4,6 +4,13 @@
   },
   "scripts": {
     "deploy": "npx sls deploy",
-    "deploy-us": "npx sls deploy --region us-east-1"
+    "deploy-us": "npx sls deploy --region us-east-1",
+    "test": "npx sls invoke -f hello",
+    "d": "npm run deploy",
+    "t": "npm test",
+    "dt": "npm run d && npm test"
+  },
+  "dependencies": {
+    "uuid": "^3.3.2"
   }
 }

@@ -6,11 +6,12 @@
     "axios": "^0.18.0"
   },
   "scripts": {
-    "test": "npx sls invoke -f test --data {}",
-    "test-us": "npx sls invoke -f test --data {} -r us-east-1",
+    "test": "npx sls invoke -f test",
+    "test-us": "npx sls invoke -f test -r us-east-1",
     "deploy": "npx sls deploy",
     "deploy-us": "npx sls deploy --region us-east-1",
-    "d": "npx sls deploy -f test",
-    "dt": "npm run d && npm test"
+    "d": "npx sls deploy",
+    "dt": "npm run deploy && npm test",
+    "dc": "npm run deploy && npx sls invoke -f coldStartTest"
   }
 }

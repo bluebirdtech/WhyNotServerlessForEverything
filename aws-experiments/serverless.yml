@@ -32,6 +32,8 @@ custom:
 functions:
   test:
     handler: test.handler
+  coldStartTest:
+    handler: coldStartTest.handler
 
 resources:
   Resources:
