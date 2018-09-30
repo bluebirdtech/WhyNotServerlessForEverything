@@ -30,8 +30,6 @@ Code comparison between ECS & Serverless, for hello-world https
     * fargate-hello-684579960.eu-west-1.elb.amazonaws.com
     * Turns out domain, route53 & certs aren't required, unless of course you actually want to map a domain
 
-NEXT: Why not?  Cold starts.  Explore cold start latency.  Multiple concurrent.  Explain.
-
 NEXT: Average latency of lambda trigger: SNS, SQS, Dynamo, 
   * Explain what Lambda can be subscribed to
   * Tip: Subscription enable/disable
@@ -43,6 +41,7 @@ NEXT: Costs between different options
   * Memory size affects overall container performance, not just memory size
 
 Session ideas:
+* Why not?  Cold starts.  Explore cold start latency.  Multiple concurrent.  Explain.
 * Ask lots of questions
   * Azure/AWS experience
   * Serverless experience

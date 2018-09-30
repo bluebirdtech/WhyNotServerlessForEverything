@@ -16,8 +16,8 @@ module.exports.handler = async (event, context) => {
     statusCode: 200,
     headers: {
       "content-type": "text/html",
-      "execution-context-id": executionContextId,
-      "is-cold-start": isColdStart
+      executionContextId,
+      isColdStart
     },
     body: "Hello World!"
   };

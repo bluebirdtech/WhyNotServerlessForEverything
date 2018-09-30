@@ -4,10 +4,18 @@ const AWS = require('aws-sdk');
 const utils = require('./utils');
 
 module.exports.handler = async (event, context) => {
-  const functionName = 'lambda-hello-dev-hello';
-
   const parallelCount = 10;
 
+  const lambdaNodeColdStartLatency = await testColdStartLatency(parallelCount, 'lambda-hello-dev-hello');
+  const lambdaDotnetColdStartLatency = await testColdStartLatency(parallelCount, 'lambda-dotnet-hello-dev-hello');
+
+  return {
+    lambdaNodeColdStartLatency,
+    lambdaDotnetColdStartLatency
+  };
+};
+
+const testColdStartLatency = async (parallelCount, functionName) => {
   const firstInvokes = await parallelTestLatency(parallelCount, async () => 
     await utils.lambdaInvoke(functionName)
   );
@@ -42,7 +50,7 @@ const testLatency = async (action) => {
 
   return {
     duration,
-    isColdStart: payload.headers["is-cold-start"],
-    executionContextId: payload.headers["execution-context-id"]
+    isColdStart: payload.headers.isColdStart,
+    executionContextId: payload.headers.executionContextId
   };
 }

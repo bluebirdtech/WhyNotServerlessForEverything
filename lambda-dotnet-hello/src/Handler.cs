@@ -7,9 +7,24 @@ namespace AwsDotnetCsharp
 {
     public class Handler
     {
-       public string Hello()
-       {
-           return "Hello World!";
-       }
+        public static string ExecutionContextId = null;
+
+        public object Hello()
+        {
+            var isColdStart = false;
+            if(ExecutionContextId == null) {
+                ExecutionContextId = Guid.NewGuid().ToString();
+                isColdStart = true;
+            }
+
+            return new {
+                statusCode = 200,
+                headers = new {
+                    executionContextId = ExecutionContextId,
+                    isColdStart = isColdStart
+                },
+                body = "Hello World!"
+            };
+        }
     }
 }
