@@ -6,12 +6,13 @@
     "axios": "^0.18.0"
   },
   "scripts": {
-    "test": "npx sls invoke -f test",
-    "test-us": "npx sls invoke -f test -r us-east-1",
     "deploy": "npx sls deploy",
-    "deploy-us": "npx sls deploy --region us-east-1",
+    "deploy-us": "npx sls deploy --r us-east-1",
     "d": "npx sls deploy",
-    "dt": "npm run deploy && npm test",
-    "dc": "npm run deploy && npx sls invoke -f coldStartTest"
+    "l": "npx sls invoke -f latencyTest",
+    "l-us": "npx sls invoke -f latencyTest -r us-east-1",
+    "c": "npx sls invoke -f coldStartTest",
+    "dl": "npm run deploy && npm run l",
+    "dc": "npm run deploy && npm run c"
   }
 }

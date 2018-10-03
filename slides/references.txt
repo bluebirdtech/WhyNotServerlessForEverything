@@ -1,0 +1,15 @@
+https://forum.serverless.com/t/best-practice-question-api-call-lambda-invoke-or-require/873/13
+https://github.com/nik-kor/http-libraries-perf-test
+https://logz.io/blog/aws-eks-ecs-and-fargate/
+https://medium.com/devopslinks/ecs-vs-eks-vs-fargate-the-good-the-bad-the-ugly-9f68bfc3bb73
+https://blog.oxalide.io/post/aws-fargate/
+http://expressjs.com/en/starter/hello-world.html
+https://nodejs.org/en/docs/guides/nodejs-docker-webapp/
+Nice fargate diagram: https://github.com/awslabs/aws-cloudformation-templates/tree/master/aws/services/ECS
+Helped me out with Fargate execution role: https://040code.github.io/2018/01/30/fargate_with_terraform/
+When not to do serverless: https://medium.com/@PaulDJohnston/when-not-to-use-serverless-jeff-6d054d0e7098
+CloudFront serverless: https://www.npmjs.com/package/serverless-plugin-cloudfront-lambda-edge
+Lambda invoke reference: https://gist.github.com/jjasonclark/283192301950c6e75b4cccb26b1c8ea6
+When not to use serverless: https://serverless.com/blog/when-why-not-use-serverless/
+Serverless is not a silver bullet, but it's close: https://medium.com/@elliot_f/serverless-is-not-a-silver-bullet-but-its-close-e79c520b2b87
+Performance by language: https://read.acloud.guru/comparing-aws-lambda-performance-when-using-node-js-java-c-or-python-281bef2c740f

@@ -30,8 +30,8 @@ custom:
   someTableName: ${self:service}-some-table
 
 functions:
-  test:
-    handler: test.handler
+  latencyTest:
+    handler: latencyTest.handler
   coldStartTest:
     handler: coldStartTest.handler
 

@@ -1,0 +1,22 @@
+{
+  "name": "contactservice.talks",
+  "version": "0.1.0",
+  "description": "Slide decks for Contact Talks",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "reveal-md": "reveal-md",
+    "start": "reveal-md ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.dev.global.tesco.org:Customer-API-Platform/ContactService.Talks.git"
+  },
+  "author": "Contact Team <05_08_uk_contactservice@uk.tesco.com>",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {
+    "reveal-md": "^0.4.3"
+  }
+}

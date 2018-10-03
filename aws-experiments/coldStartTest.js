@@ -16,17 +16,12 @@ module.exports.handler = async (event, context) => {
 };
 
 const testColdStartLatency = async (parallelCount, functionName) => {
-  const firstInvokes = await parallelTestLatency(parallelCount, async () => 
-    await utils.lambdaInvoke(functionName)
-  );
-
-  const secondInvokes = await parallelTestLatency(parallelCount, async () => 
+  const invokes = await parallelTestLatency(parallelCount, async () => 
     await utils.lambdaInvoke(functionName)
   );
 
   return {
-    firstInvokes,
-    secondInvokes
+    invokes
   };
 };
 
